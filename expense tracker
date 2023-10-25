@@ -1,0 +1,174 @@
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class ExpenseTracker {
+    private static final String DATA_FILE = "expenses.txt";
+    private static List<Expense> expenses = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        loadExpenses();
+
+        while (true) {
+            System.out.println("\nExpense Tracker Menu");
+            System.out.println("1. Add Expense");
+            System.out.println("2. View Expenses");
+            System.out.println("3. Expense Summaries");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+
+            switch (choice) {
+                case 1:
+                    addExpense();
+                    break;
+                case 2:
+                    viewExpenses();
+                    break;
+                case 3:
+                    expenseSummaries();
+                    break;
+                case 4:
+                    saveExpenses();
+                    System.out.println("Exiting Expense Tracker. Goodbye!");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    private static void addExpense() {
+        System.out.print("Enter expense description: ");
+        String description = scanner.nextLine();
+        double amount = getValidAmount();
+        System.out.print("Enter expense category: ");
+        String category = scanner.nextLine();
+
+        expenses.add(new Expense(description, amount, category));
+        System.out.println("Expense added successfully.");
+    }
+
+    private static void viewExpenses() {
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses to display.");
+        } else {
+            System.out.println("\nExpense List:");
+            for (int i = 0; i < expenses.size(); i++) {
+                System.out.printf("%d. %s: $%.2f (%s)%n", i + 1, expenses.get(i).getDescription(),
+                        expenses.get(i).getAmount(), expenses.get(i).getCategory());
+            }
+        }
+    }
+
+    private static void expenseSummaries() {
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses for summaries.");
+            return;
+        }
+
+        System.out.println("\nExpense Summaries");
+        System.out.println("1. Total Expenses");
+        System.out.println("2. Total Expenses by Category");
+        System.out.print("Enter your choice: ");
+        int choice = scanner.nextInt();
+
+        switch (choice) {
+            case 1:
+                double totalExpenses = expenses.stream().mapToDouble(Expense::getAmount).sum();
+                System.out.printf("Total Expenses: $%.2f%n", totalExpenses);
+                break;
+            case 2:
+                System.out.print("Enter a category to view total expenses for that category: ");
+                scanner.nextLine();
+                String category = scanner.nextLine();
+                double categoryTotal = expenses.stream()
+                        .filter(e -> e.getCategory().equalsIgnoreCase(category))
+                        .mapToDouble(Expense::getAmount)
+                        .sum();
+                System.out.printf("Total Expenses for %s: $%.2f%n", category, categoryTotal);
+                break;
+            default:
+                System.out.println("Invalid choice.");
+        }
+    }
+
+    private static double getValidAmount() {
+        while (true) {
+            System.out.print("Enter expense amount: $");
+            String input = scanner.nextLine();
+            try {
+                double amount = Double.parseDouble(input);
+                if (amount >= 0) {
+                    return amount;
+                } else {
+                    System.out.println("Amount must be a non-negative number.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
+    }
+
+    private static void loadExpenses() {
+        try {
+            File file = new File(DATA_FILE);
+            if (file.exists()) {
+                BufferedReader reader = new BufferedReader(new FileReader(DATA_FILE));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length == 3) {
+                        String description = parts[0];
+                        double amount = Double.parseDouble(parts[1]);
+                        String category = parts[2];
+                        expenses.add(new Expense(description, amount, category));
+                    }
+                }
+                reader.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error loading expenses. Data may be lost.");
+        }
+    }
+
+    private static void saveExpenses() {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(DATA_FILE));
+            for (Expense expense : expenses) {
+                writer.write(String.format("%s,%.2f,%s%n", expense.getDescription(), expense.getAmount(), expense.getCategory()));
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error saving expenses. Data may be lost.");
+        }
+    }
+}
+
+class Expense {
+    private String description;
+    private double amount;
+    private String category;
+
+    public Expense(String description, double amount, String category) {
+        this.description = description;
+        this.amount = amount;
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+}
