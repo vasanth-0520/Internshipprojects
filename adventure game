@@ -1,0 +1,79 @@
+import java.util.Scanner;
+
+public class TextAdventureGame {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String playerName;
+        
+        System.out.println("Welcome to the Text Adventure Game!");
+        System.out.print("Please enter your name: ");
+        playerName = scanner.nextLine();
+        
+        System.out.println("Hello, " + playerName + "! You find yourself in a mysterious forest.");
+        
+        while (true) {
+            System.out.println("You can go 'left' or 'right'. Choose wisely.");
+            String choice = scanner.nextLine().toLowerCase();
+            
+            if (choice.equals("left")) {
+                // Implement the left path of the story
+                System.out.println("You chose to go left. You encounter a friendly squirrel.");
+                // Continue the story and add more choices and outcomes.
+            } else if (choiimport java.util.Scanner;
+
+public class TextAdventureGame {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String playerName;
+        
+        System.out.println("Welcome to the Text Adventure Game!");
+        System.out.print("Please enter your name: ");
+        playerName = scanner.nextLine();
+        
+        System.out.println("Hello, " + playerName + "! You find yourself in a mysterious forest.");
+        
+        while (true) {
+            System.out.println("You can go 'left' or 'right'. Choose wisely.");
+            String choice = scanner.nextLine().toLowerCase();
+            
+            if (choice.equals("left")) {
+                // Implement the left path of the story
+                System.out.println("You chose to go left. You encounter a friendly squirrel.");
+                // Continue the story and add more choices and outcomes.
+            } else if (choice.equals("right")) {
+                // Implement the right path of the story
+                System.out.println("You chose to go right. You stumble upon a dark cave.");
+                // Continue the story and add more choices and outcomes.
+            } else {
+                System.out.println("Invalid choice. Please enter 'left' or 'right'.");
+            }
+            
+            System.out.print("Do you want to continue the adventure? (yes/no): ");
+            String playAgain = scanner.nextLine().toLowerCase();
+            if (!playAgain.equals("yes")) {
+                System.out.println("Thanks for playing!");
+                break;
+            }
+        }
+        
+        scanner.close();
+    }
+}ce.equals("right")) {
+                // Implement the right path of the story
+                System.out.println("You chose to go right. You stumble upon a dark cave.");
+                // Continue the story and add more choices and outcomes.
+            } else {
+                System.out.println("Invalid choice. Please enter 'left' or 'right'.");
+            }
+            
+            System.out.print("Do you want to continue the adventure? (yes/no): ");
+            String playAgain = scanner.nextLine().toLowerCase();
+            if (!playAgain.equals("yes")) {
+                System.out.println("Thanks for playing!");
+                break;
+            }
+        }
+        
+        scanner.close();
+    }
+}
